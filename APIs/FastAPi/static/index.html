@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EstateIQ | House Price Predictor</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: #f3f5f9;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #111c35;
+            color: white;
+            padding: 22px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: #65d6a5;
+        }
+
+        .status {
+            font-size: 12px;
+            color: #65d6a5;
+        }
+
+        main {
+            max-width: 1050px;
+            margin: 65px auto;
+            padding: 0 24px;
+        }
+
+        .hero {
+            margin-bottom: 35px;
+        }
+
+        .hero small {
+            color: #328d72;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 5vw, 43px);
+            margin: 14px 0;
+            letter-spacing: -1.5px;
+        }
+
+        .hero p {
+            color: #788398;
+            line-height: 1.7;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(25, 40, 70, 0.06);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #929bad;
+            font-size: 13px;
+            margin-bottom: 28px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .field label {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e1e6ee;
+            border-radius: 9px;
+            outline: none;
+            font-size: 15px;
+            background: #fafbfc;
+            color: #172033;
+        }
+
+        input:focus {
+            border-color: #328d72;
+            box-shadow: 0 0 0 3px rgba(50, 141, 114, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 27px;
+            background: #172c48;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #245b52;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+            transform: none;
+        }
+
+        .result-card {
+            background: #172c48;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 360px;
+        }
+
+        .result-card h2 {
+            font-size: 20px;
+        }
+
+        .result-label {
+            color: #a8b8c9;
+            font-size: 13px;
+            margin-top: 35px;
+        }
+
+        .price {
+            color: #65d6a5;
+            font-size: clamp(30px, 4vw, 40px);
+            font-weight: 800;
+            margin: 12px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .result-info {
+            color: #a8b8c9;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .divider {
+            height: 1px;
+            background: #35465f;
+            margin: 25px 0;
+        }
+
+        .error {
+            color: #ff8585;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+
+        footer {
+            text-align: center;
+            color: #929bad;
+            font-size: 12px;
+            margin-top: 35px;
+        }
+
+        @media (max-width: 750px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                margin-top: 35px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 20px 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Estate<span>IQ.</span></div>
+    <div class="status">● AI SERVICE</div>
+</header>
+
+<main>
+
+    <section class="hero">
+        <small>Machine Learning · Real Estate</small>
+        <h1>Discover your property's value.</h1>
+        <p>
+            Enter your property details and let our machine learning
+            model estimate its market price.
+        </p>
+    </section>
+
+    <div class="layout">
+
+        <section class="card">
+            <h2>Property details</h2>
+            <p class="subtitle">
+                Provide information about your property.
+            </p>
+
+            <form id="predictionForm">
+
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label for="bedrooms">Bedrooms</label>
+                        <input
+                            type="number"
+                            id="bedrooms"
+                            min="1"
+                            step="1"
+                            placeholder="e.g. 3"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="bathrooms">Bathrooms</label>
+                        <input
+                            type="number"
+                            id="bathrooms"
+                            min="1"
+                            step="any"
+                            placeholder="e.g. 2"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="sqm">Area (m²)</label>
+                        <input
+                            type="number"
+                            id="sqm"
+                            min="1"
+                            step="any"
+                            placeholder="e.g. 120"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="city">City</label>
+                        <input
+                            type="text"
+                            id="city"
+                            placeholder="e.g. Baku"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <button type="submit" id="predictBtn">
+                    Estimate Property Price →
+                </button>
+
+                <p class="error" id="error"></p>
+
+            </form>
+        </section>
+
+        <section class="card result-card">
+
+            <div>
+                <h2>Prediction result</h2>
+                <p class="result-label">
+                    ESTIMATED PROPERTY VALUE
+                </p>
+
+                <div class="price" id="price">
+                    —
+                </div>
+
+                <p class="result-info" id="resultInfo">
+                    Your estimated property price will
+                    appear here after prediction.
+                </p>
+            </div>
+
+            <div>
+                <div class="divider"></div>
+                <p class="result-info">
+                    Powered by Machine Learning<br>
+                    FastAPI · Scikit-learn
+                </p>
+            </div>
+
+        </section>
+
+    </div>
+
+    <footer>
+        EstateIQ © 2026 · AI-powered property estimation
+    </footer>
+
+</main>
+
+<script>
+    const form = document.getElementById("predictionForm");
+    const button = document.getElementById("predictBtn");
+    const price = document.getElementById("price");
+    const error = document.getElementById("error");
+    const resultInfo = document.getElementById("resultInfo");
+
+    form.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+        error.textContent = "";
+        button.disabled = true;
+        button.textContent = "Calculating...";
+        price.textContent = "Processing...";
+
+        const houseData = {
+            Bedrooms: Number(document.getElementById("bedrooms").value),
+            Bathrooms: Number(document.getElementById("bathrooms").value),
+            Sqm: Number(document.getElementById("sqm").value),
+            City: document.getElementById("city").value.trim()
+        };
+
+        try {
+
+            const response = await fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(houseData)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result.detail || "Prediction failed."
+                );
+            }
+
+            const predictedPrice = Number(result.predicted_price);
+
+            if (!Number.isFinite(predictedPrice)) {
+                throw new Error("Invalid prediction returned by API.");
+            }
+
+            price.textContent = predictedPrice.toLocaleString(
+                "en-US",
+                {
+                    maximumFractionDigits: 2
+                }
+            ) + " AZN";
+
+            resultInfo.textContent =
+                "Your property price was estimated successfully.";
+
+        } catch (err) {
+
+            price.textContent = "Unavailable";
+            error.textContent = err.message;
+            resultInfo.textContent =
+                "Please check your information and try again.";
+
+        } finally {
+
+            button.disabled = false;
+            button.textContent = "Estimate Property Price →";
+
+        }
+
+    });
+</script>
+
+</body>
+</html>
