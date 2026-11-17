@@ -1,20 +1,45 @@
 
 import { useState } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import "./App.css";
 
+
+interface HouseFormData {
+  Bedrooms: string;
+  Bathrooms: string;
+  Sqm: string;
+  City: string;
+}
+
+
+interface HouseData {
+  Bedrooms: number;
+  Bathrooms: number;
+  Sqm: number;
+  City: string;
+}
+
+
+interface PredictionResponse {
+  success?: boolean;
+  predicted_price?: number;
+  detail?: string;
+}
+
 function App() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<HouseFormData>({
     Bedrooms: "",
     Bathrooms: "",
     Sqm: "",
     City: "",
   });
 
-  const [prediction, setPrediction] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [prediction, setPrediction] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
-  const handleChange = (e) => {
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     setFormData((previous) => ({
@@ -23,14 +48,15 @@ function App() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setLoading(true);
     setError("");
     setPrediction(null);
 
-    const houseData = {
+    const houseData: HouseData = {
       Bedrooms: Number(formData.Bedrooms),
       Bathrooms: Number(formData.Bathrooms),
       Sqm: Number(formData.Sqm),
@@ -49,16 +75,24 @@ function App() {
         }
       );
 
-      const result = await response.json();
+      const result: PredictionResponse = await response.json();
 
       if (!response.ok) {
         throw new Error(result.detail || "Prediction failed");
       }
 
+      if (typeof result.predicted_price !== "number") {
+        throw new Error("Invalid prediction received from API");
+      }
+
       setPrediction(result.predicted_price);
 
-    } catch (err) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
     }
