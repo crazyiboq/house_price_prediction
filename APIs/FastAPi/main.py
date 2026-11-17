@@ -1,6 +1,7 @@
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 import joblib
 from pathlib import Path
@@ -11,6 +12,14 @@ import pandas as pd
 
 app = FastAPI(
     title="Price prediction API Service"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -101,7 +110,7 @@ async def predict_price(house: HouseFeatures):
 
     except Exception as e:
 
-        raise HTTPException(
+        raise HTTPException(    
             status_code=500,
             detail=f"Prediction failed: {str(e)}"
         )

@@ -1,0 +1,185 @@
+
+.app {
+  min-height: 100vh;
+}
+
+.navbar {
+  background: #111c35;
+  color: white;
+  padding: 24px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar h2 {
+  font-size: 24px;
+}
+
+.navbar h2 span {
+  color: #65d6a5;
+}
+
+.navbar p {
+  font-size: 12px;
+  color: #65d6a5;
+  letter-spacing: 1px;
+}
+
+.container {
+  max-width: 1050px;
+  margin: 65px auto;
+  padding: 0 24px;
+}
+
+.hero {
+  margin-bottom: 35px;
+}
+
+.hero span {
+  color: #328d72;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.hero h1 {
+  font-size: clamp(30px, 5vw, 43px);
+  margin: 14px 0;
+  letter-spacing: -1.5px;
+}
+
+.hero p, .subtitle {
+  color: #788398;
+  line-height: 1.7;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 25px;
+}
+
+.form-card, .result-card {
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 10px 35px rgba(25, 40, 70, 0.06);
+}
+
+.form-card {
+  background: white;
+}
+
+.form-card h2, .result-card h2 {
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 13px;
+  margin-bottom: 28px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.field input {
+  padding: 14px;
+  border: 1px solid #e1e6ee;
+  border-radius: 9px;
+  outline: none;
+  background: #fafbfc;
+  width: 100%;
+}
+
+.field input:focus {
+  border-color: #328d72;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  margin-top: 27px;
+  border: none;
+  border-radius: 10px;
+  background: #172c48;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #245b52;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.result-card {
+  background: #172c48;
+  color: white;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.result-card > span {
+  color: #a8b8c9;
+  font-size: 12px;
+  margin-top: 35px;
+}
+
+.result-card h1 {
+  color: #65d6a5;
+  font-size: clamp(26px, 4vw, 40px);
+  overflow-wrap: anywhere;
+  margin: 12px 0;
+}
+
+.result-card p, .result-footer {
+  color: #a8b8c9;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.result-footer {
+  border-top: 1px solid #35465f;
+  padding-top: 25px;
+}
+
+.error {
+  color: #dc4444;
+  font-size: 13px;
+  margin-top: 15px;
+}
+
+@media (max-width: 750px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .navbar {
+    padding: 20px 24px;
+  }
+}
